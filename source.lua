@@ -990,6 +990,29 @@ function RayfieldLibrary:CreateWindow(Settings)
 			end
 		end
 
+		if Settings.KeySystem then
+    -- Define a function to check if the key has expired
+    local function keyExpired(lastUseTimestamp)
+        -- Calculate the current time
+        local currentTime = os.time()
+        -- Calculate the difference in seconds between the current time and the last use timestamp
+        local timeDifference = currentTime - lastUseTimestamp
+        -- Check if the time difference is greater than 24 hours (24 * 60 * 60 seconds)
+        return timeDifference > (24 * 60 * 60)
+    end
+
+    -- Check if the key has been used before and if it has expired
+    if not Settings.KeySettings.LastUseTimestamp or keyExpired(Settings.KeySettings.LastUseTimestamp) then
+        -- Key has not been used before or has expired
+        Passthrough = true
+        return
+    end
+
+    -- Key is still valid, continue with key verification logic
+    -- Your existing key verification code goes here
+end
+
+
 		if not Passthrough then
 			local AttemptsRemaining = math.random(2,6)
 			Rayfield.Enabled = false
